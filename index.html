@@ -1,0 +1,236 @@
+﻿<!doctype html>
+<html>
+  <head>
+    <title>Hello World</title>
+    <link rel="stylesheet" type="text/css" href="./stylesheets/star-citizen-launcher-ui.css">
+    <script type="text/template" id="comm-link-template">
+      <article>
+        <h1><a href="{url}" data-external>{title}</a></h1>
+        <time>{time}</time>
+        <p class="summary">{summary}</p>
+      </article>
+    </script>
+    <script type="text/template" id="patch-notes-template">
+      <article>
+        <h1><a href="{url}" data-external>{title}</a></h1>
+        <time>{time}</time>
+        <div class="notes">{notes}</div>
+      </article>
+    </script>
+  </head>
+  <body>
+    <section id="launcher">
+      <header id="header">
+        <h1><img src="./images/logo-ptu.png" alt="Star Citizen"></h1>
+        <nav>
+          <ul>
+            <li><a data-external href="https://robertsspaceindustries.com">官网</a></li>
+            <li><a data-external href="https://forums.robertsspaceindustries.com">论坛</a></li>
+            <li><a data-external href="https://robertsspaceindustries.com/faq">FAQ</a></li>
+            <li><a data-external href="https://forums.robertsspaceindustries.com/categories/test-pilot-headquarters">帮助</a></li>
+          </ul>
+        </nav>
+        <section id="environment-switcher" class="mode-public">
+          <input type="radio" id="environment-public" name="environment" value="Public" checked>
+          <input type="radio" id="environment-ptu" name="environment" value="Test">
+          <label class="public" for="environment-public">Live</label>
+          <span>/</span>
+          <label class="test" for="environment-ptu">PTU</label>
+        </section>
+      </header>
+      <main id="content">
+        <section id="login">
+          <section class="error"></section>
+          <h1 class="default">
+            <span class="default">访问银河网络</span>
+            <span class="sending">核对UEE记录</span>
+          </h1>
+          <form>
+            <fieldset>
+              <legend>请使用RSI凭证登陆</legend>
+              <ul>
+                <li class="username">
+                  <label for="login-username">用户名</label>
+                  <div class="wrapper">
+                    <input type="text" id="login-username" name="username" placeholder="用户名" required minlength="3" autofocus>
+                  </div>
+                  <div class="decoration left"></div>
+                  <div class="decoration right"></div>
+                </li>
+                <li class="password">
+                  <label for="login-password">密码</label>
+                  <div class="wrapper">
+                    <input type="password" id="login-password" name="password" placeholder="密码" required minlength="3">
+                  </div>
+                  <div class="decoration left"></div>
+                  <div class="decoration right"></div>
+                </li>
+              </ul>
+              <button>
+                <span class="default">登陆</span>
+                <span class="sending">登陆中</span>
+              </button>
+            </fieldset>        
+          </form>
+        </section>
+        <section id="news-and-launch" hidden>
+          <section class="news-and-patch-notes">
+            <header>
+              <ul>
+                <li><a href="#comm-links" class="active">信息链接</a></li>
+                <li><a href="#patch-notes">补丁记录</a></li>
+              </ul>
+            </header>
+            <div class="content">
+              <section id="comm-links">
+                <ul></ul>
+              </section>
+              <section id="patch-notes" hidden>
+              </section>
+            </div>
+          </section>
+          <section class="game-commands">
+            <h1></h1>
+            <div class="game-version">客户端版本: <span></span></div>
+            <div class="wrapper">
+              <section class="download-progress" hidden>
+                <section class="progress-bar">                  
+                  <progress max="100" value="0"></progress>
+                  <a class="pause" href="#">暂停</a>
+                  <div class="decoration left"></div>
+                  <div class="decoration right"></div>
+                </section>
+                <dl class="statistics">
+                  <dt>预计时间:</dt>
+                  <dd class="estimated-time"></dd>
+                  <dt>剩余大小:</dt>
+                  <dd class="bytes-left"></dd>
+                  <dt>下载速度:</dt>
+                  <dd class="download-speed"></dd>
+                </dl>                
+              </section>
+              <section class="launch-options" hidden>
+                <button type="button" class="holo-button" id="launch-game">启动</button>
+              </section>
+            </div>
+          </section>
+        </section>
+      </main>
+      <footer id="footer">
+        <div class="launcher-version"><span class="number"></span></div>
+        <small class="copyright">
+          &copy;<span class="year"></span> <a data-external href="https://cloudimperiumgames.com">Cloud Imperium Games</a>
+        </small>
+      </footer>
+      <aside id="options">
+        <ul>
+          <li class="settings-container">
+            <a class="settings" href="">设置</a>
+            <form class="settings-dropdown">
+              <ul>
+                <li>
+                  <fieldset>
+                    <legend>分析游戏文件</legend>
+                    <button class="settings-verify settings-button"type="button"><span>验证</span></button>
+                  </fieldset>
+                </li>
+                <li>
+                  <fieldset>
+                    <legend>下载限速</legend>
+                    <select class="settings-download-limit">
+                      <option value="0">无限制</option>
+                      <option value="80000">80 MB/s</option>
+                      <option value="16000">16 MB/s</option>
+                      <option value="8000">8 MB/s</option>
+                      <option value="4000">4 MB/s</option>
+                      <option value="1600">1.6 MB/s</option>
+                      <option value="800">800 KB/s</option>
+                      <option value="400">400 KB/s</option>
+                    </select>
+                  </fieldset>
+                </li>
+                <li class="settings-ptu">
+                  <fieldset>
+                    <div class="ptu-info">
+                      <label>公开测试宇宙</label>
+                      <div class="ptu-version">版本: <span class="number"></span></div>
+                    </div>
+                    <ul class="ptu-actions">
+                      <li><button class="settings-copy-account settings-button" type="button"><span>Copy Account</span></button></li>
+                      <li><button class="settings-remove-account settings-button" type="button"><span>Erase Account</span></button></li>
+                    </ul>
+                  </fieldset>
+                </li>
+              </ul> 
+              <div class="submit-wrapper">
+                <button type="submit"><strong>更新</strong></button>
+                <div class="border-decoration"></div>
+              </div>
+            </form>
+          </li>
+          <li><a class="mute" href="">静音</a></li>
+          <li><a data-command-minimize class="minimize" href="">最小化</a></li>
+          <li><a data-command-quit class="close" href="">退出</a></li>
+        </ul>
+      </aside>
+      <div id="backdrop"></div>
+      <div id="login-overlay">
+        <div class="access-circles">
+          <div class="outer"></div>
+          <div class="inner"></div>
+          <div class="caption">成功：找到公民记录<br>授权访问</div>
+        </div>
+      </div>      
+      <div id="background-strips"><div class="strip"></div><div class="strip"></div><div class="strip"></div></div>
+      <ul id="background-container">
+        <li><img src="./images/bg-1.png"></li>
+        <li><img src="./images/bg-2.png"></li>
+        <li><img src="./images/bg-3.png"></li>
+        <li><img src="./images/bg-4.png"></li>
+        <li><img src="./images/bg-5.png"></li>        
+        <li><img src="./images/bg-6.png"></li>
+        <li><img src="./images/bg-7.png"></li>
+      </ul>
+      <div class="decoration left"></div>
+      <div class="decoration right"></div>
+    </section>
+    <section id="fatal-error">
+      <section class="error">
+        <h1></h1>
+        <p></p>
+       <a href="#" class="close-fatal-error">&times;</a>
+      </section>
+      <div class="fatal-error-backdrop"></div>
+    </section>
+    <section id="info-box-modal">
+      <section class="info-box">
+        <h1>警告</h1>
+        <p>您确定复制您的账号信息到公开测试宇宙(PTU)吗?</p>
+        <ul class="info-box-options">
+          <li><a href="#" data-type="NO">不要</a></li>
+          <li><a href="#" data-type="YES">是的</a></li>
+          <li><a href="#" data-type="OK">好的</a></li>
+        </ul> 
+      </section>
+      <div class="info-box-backdrop"></div>
+    </section>
+    <section id="agreement">
+      <div class="wrapper"></div>
+      <footer class="actions">
+        <form>
+          <ul>
+            <li><button class="accept blue-button" data-value="accept">接受</button></li>
+            <li><button class="cancel blue-button" data-value="cancel">取消</button></li>
+          </ul>
+        </form>
+      </footer>
+    </section>
+    <div data-draggable-area></div>
+    <script type="text/javascript_D" src="./jspm_packages/system.js"></script>
+    <script type="text/javascript_D" src="./config.js"></script>
+    <script type="text/javascript_D">
+      System.import("./src/scripts/index").catch(console.log.bind(console));
+    </script>
+    <script type="text/javascript" src="build.js"></script>
+  </body>
+</html>

@@ -42,7 +42,7 @@
         <section id="login">
           <section class="error"></section>
           <h1 class="default">
-            <span class="default">访问银河网络</span>
+            <span class="default">访问银行网络</span>
             <span class="sending">核对UEE记录</span>
           </h1>
           <form>
@@ -77,8 +77,8 @@
           <section class="news-and-patch-notes">
             <header>
               <ul>
-                <li><a href="#comm-links" class="active">信息链接</a></li>
-                <li><a href="#patch-notes">补丁记录</a></li>
+                <li><a href="#comm-links" class="active">信息中心</a></li>
+                <li><a href="#patch-notes">补丁信息</a></li>
               </ul>
             </header>
             <div class="content">
@@ -90,7 +90,7 @@
             </div>
           </section>
           <section class="game-commands">
-            <h1></h1>
+            <h1 class="disabled"></h1>
             <div class="game-version">客户端版本: <span></span></div>
             <div class="wrapper">
               <section class="download-progress" hidden>
@@ -112,6 +112,14 @@
               <section class="launch-options" hidden>
                 <button type="button" class="holo-button" id="launch-game">启动</button>
               </section>
+              <section class="update-or-install">
+                <button type="button">
+                  <span class="background-wrapper"><span class="background"></span></span><span class="left-light"></span>
+                  <span class="right-light"></span>
+                  <span class="install caption on">安装</span>
+                  <span class="update caption on">更新</span>
+                </button>
+              </section
             </div>
           </section>
         </section>
@@ -130,42 +138,48 @@
               <ul>
                 <li>
                   <fieldset>
-                    <legend>分析游戏文件</legend>
-                    <button class="settings-verify settings-button"type="button"><span>验证</span></button>
+                    <legend>校验游戏文件</legend>
+                    <button class="settings-verify settings-button"type="button"><span>Verify</span></button>
                   </fieldset>
                 </li>
-                <li>
+                <li class="settings-download-limit-item">
                   <fieldset>
                     <legend>下载限速</legend>
                     <select class="settings-download-limit">
                       <option value="0">无限制</option>
-                      <option value="80000">80 MB/s</option>
                       <option value="16000">16 MB/s</option>
                       <option value="8000">8 MB/s</option>
                       <option value="4000">4 MB/s</option>
                       <option value="1600">1.6 MB/s</option>
                       <option value="800">800 KB/s</option>
                       <option value="400">400 KB/s</option>
+                      <option value="200">150 KB/s</option>
+                      <option value="64">64 KB/s</option>
+                    </select>
+                  </fieldset>
+                </li>
+                <li>
+                  <fieldset>
+                    <legend>P2P</legend>
+                    <select class="settings-p2p">
+                      <option value="1">开启</option>
+                      <option value="0">关闭</option>
                     </select>
                   </fieldset>
                 </li>
                 <li class="settings-ptu">
                   <fieldset>
                     <div class="ptu-info">
-                      <label>公开测试宇宙</label>
+                      <label>Public Test Universe</label>
                       <div class="ptu-version">版本: <span class="number"></span></div>
                     </div>
                     <ul class="ptu-actions">
-                      <li><button class="settings-copy-account settings-button" type="button"><span>Copy Account</span></button></li>
-                      <li><button class="settings-remove-account settings-button" type="button"><span>Erase Account</span></button></li>
+                      <li><button class="settings-copy-account settings-button" type="button"><span>复制账号</span></button></li>
+                      <li><button class="settings-remove-account settings-button" type="button"><span>清除账号</span></button></li>
                     </ul>
                   </fieldset>
                 </li>
               </ul> 
-              <div class="submit-wrapper">
-                <button type="submit"><strong>更新</strong></button>
-                <div class="border-decoration"></div>
-              </div>
             </form>
           </li>
           <li><a class="mute" href="">静音</a></li>
@@ -178,7 +192,7 @@
         <div class="access-circles">
           <div class="outer"></div>
           <div class="inner"></div>
-          <div class="caption">成功：找到公民记录<br>授权访问</div>
+          <div class="caption">成功: 找到公民记录<br>授权访问</div>
         </div>
       </div>      
       <div id="background-strips"><div class="strip"></div><div class="strip"></div><div class="strip"></div></div>
@@ -209,7 +223,7 @@
         <ul class="info-box-options">
           <li><a href="#" data-type="NO">不要</a></li>
           <li><a href="#" data-type="YES">是的</a></li>
-          <li><a href="#" data-type="OK">好的</a></li>
+          <li><a href="#" data-type="OK">好哒</a></li>
         </ul> 
       </section>
       <div class="info-box-backdrop"></div>

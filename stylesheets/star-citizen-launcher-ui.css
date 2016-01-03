@@ -463,10 +463,9 @@ th {
   src: url("../fonts/zh.woff") format("woff");
 }
 @font-face {
-  font-family: "fontawesome";
+  font-family: "FontAwesome";
   src: url("../fonts/fontawesome.woff") format("woff");
 }
-
 @-webkit-keyframes dot-blink {
   0% {
     opacity: 0.1;
@@ -963,7 +962,7 @@ body {
   color: #FFF;
 }
 #options > ul a::before {
-  font-family: "fontawesome";
+  font-family: "FontAwesome", sans-serif;
   content: "";
   position: absolute;
   top: 0;
@@ -1117,7 +1116,13 @@ body {
   width: 170px;
   height: 40px;
 }
+#options > ul .settings-container .settings-dropdown .settings-download-limit-item .x-select {
+  z-index: 6;
+}
 #options > ul .settings-container .settings-dropdown .settings-download-limit {
+  height: 40px;
+}
+#options > ul .settings-container .settings-dropdown .settings-p2p {
   height: 40px;
 }
 #options > ul .settings-container .settings-dropdown .settings-ptu {
@@ -1705,6 +1710,9 @@ body {
   margin: 0 0 10px 0;
   color: #04f6ff;
 }
+#news-and-launch .game-commands h1.disabled::after {
+  display: none;
+}
 #news-and-launch .game-commands h1::after {
   content: "";
   width: 4px;
@@ -1717,6 +1725,11 @@ body {
 #news-and-launch .game-commands .wrapper {
   position: relative;
   height: 55px;
+}
+#news-and-launch .game-commands .wrapper .update-or-install {
+  position: absolute;
+  top: 10px;
+  left: 200px;
 }
 #news-and-launch .game-commands .wrapper .download-progress {
   opacity: 1;
@@ -1811,7 +1824,7 @@ body {
   content: "\f04c";
   display: block;
   text-indent: 0;
-  font: 20px/1 "fontawesome";
+  font: 20px/1 "FontAwesome", sans-serif;
   text-decoration: none;
   color: #7ca2c8;
   opacity: .5;
@@ -2048,6 +2061,28 @@ body {
   font-size: 30px;
   cursor: pointer;
 }
+#fatal-error[data-type="warning"] .error {
+  border: 1px solid #CCCC00;
+  color: #CCCC00;
+  background: rgba(204, 204, 0, 0.25);
+}
+#fatal-error[data-type="warning"] .error h1 {
+  color: #CCCC00;
+}
+#fatal-error[data-type="warning"] .error .close-fatal-error {
+  color: #CCCC00;
+}
+#fatal-error[data-type="info"] .error {
+  border: 1px solid #04f6ff;
+  color: #04f6ff;
+  background: rgba(4, 246, 255, 0.25);
+}
+#fatal-error[data-type="info"] .error h1 {
+  color: #04f6ff;
+}
+#fatal-error[data-type="info"] .error .close-fatal-error {
+  color: #04f6ff;
+}
 #info-box-modal {
   display: none;
   position: fixed;
@@ -2235,6 +2270,7 @@ body {
   left: 0;
   top: 1.75em;
   width: 100%;
+  z-index: 10;
 }
 .x-select [data-dropdown]:not(.x-select-dropdown-interacted) [data-option][aria-selected="true"] {
   background: lightgrey;
@@ -2326,21 +2362,21 @@ body {
   overflow: hidden;
 }
 .x-select [data-dropdown]:not(.x-select-dropdown-interacted) [data-option][aria-selected="true"] {
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.7);
   border-left-color: #00edff;
 }
 .x-select [data-dropdown]:not(.x-select-dropdown-interacted) [data-option][aria-selected="true"]::before {
   width: 20px;
 }
 .x-select [data-dropdown]:not(.x-select-dropdown-interacted) [data-option][aria-selected="true"].x-select-option-highlighted {
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.7);
   border-left-color: #00edff;
 }
 .x-select [data-dropdown]:not(.x-select-dropdown-interacted) [data-option][aria-selected="true"].x-select-option-highlighted::before {
   width: 20px;
 }
 .x-select [data-dropdown]:not(.x-select-dropdown-interacted) [data-option].x-select-option-highlighted {
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.7);
 }
 .x-select [data-option] {
   background: rgba(0, 0, 0, 0.9);
@@ -2398,7 +2434,7 @@ body {
   right: 0px;
   border: 0;
   overflow: hidden;
-  font: bold 13px/1 "fontawesome";
+  font: bold 13px/1 "zh";
   color: #0891c5;
   text-transform: uppercase;
   outline: none;
@@ -2502,4 +2538,206 @@ body {
 }
 .ptu #news-and-launch .wrapper .download-progress .progress-bar .decoration::before {
   background: #e9941c;
+}
+#launcher.state-update .update-or-install button {
+  width: 250px;
+  font: bold 14px/1 'Orbitron', sans-serif;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: #42cbf8;
+  text-align: center;
+  background: transparent;
+  position: relative;
+  border: 0;
+  padding-top: 9px;
+}
+#launcher.state-update .update-or-install button .background {
+  display: block;
+  width: 250px;
+  height: 35px;
+  border: solid #29648a;
+  border-width: 1px 0;
+  background: rgba(0, 0, 0, 0.25);
+  -webkit-transform: rotateX(-45deg) scaleY(1.4);
+}
+#launcher.state-update .update-or-install button .background::before {
+  content: '';
+  display: block;
+  position: absolute;
+  left: -1px;
+  top: -1px;
+  width: 8px;
+  height: 35px;
+  background: #42cbf8;
+}
+#launcher.state-update .update-or-install button .background::after {
+  content: '';
+  display: block;
+  position: absolute;
+  right: -1px;
+  top: -1px;
+  width: 8px;
+  height: 35px;
+  background: #42cbf8;
+}
+#launcher.state-update .update-or-install button .caption {
+  color: #29648a;
+  opacity: 1;
+  letter-spacing: 2px;
+}
+#launcher.state-update .update-or-install button .caption.hidden {
+  opacity: 0;
+}
+#launcher.state-update .update-or-install button .caption.on {
+  color: #42cbf8;
+  text-shadow: 2px 2px 3px rgba(0, 112, 202, 0.7), -2px -2px 3px rgba(0, 112, 202, 0.7);
+}
+#launcher.state-update .update-or-install button .background-wrapper {
+  display: block;
+  position: absolute;
+  left: 0%;
+  top: 0;
+  width: 250px;
+  height: 35px;
+  -webkit-perspective: 145px;
+}
+#launcher.state-update .update-or-install button .left-light,
+#launcher.state-update .update-or-install button .right-light {
+  display: block;
+  position: absolute;
+  z-index: -1;
+  top: -25px;
+  width: 95px;
+  height: 85px;
+  overflow: hidden;
+}
+#launcher.state-update .update-or-install button .left-light::before,
+#launcher.state-update .update-or-install button .right-light::before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 15px;
+  width: 25px;
+  height: 55px;
+  background: red;
+}
+#launcher.state-update .update-or-install button .left-light {
+  left: -50px;
+}
+#launcher.state-update .update-or-install button .left-light::before {
+  left: -155px;
+  box-shadow: 190px 0 25px rgba(0, 112, 202, 0.7);
+  -webkit-transform: skew(47deg);
+}
+#launcher.state-update .update-or-install button .right-light {
+  right: -50px;
+}
+#launcher.state-update .update-or-install button .right-light::before {
+  right: -155px;
+  box-shadow: -190px 0 25px rgba(0, 112, 202, 0.7);
+  -webkit-transform: skew(-47deg);
+}
+#launcher.state-update .update-or-install .install {
+  display: none;
+}
+#launcher.state-full-install .update-or-install button {
+  width: 250px;
+  font: bold 14px/1 'Orbitron', sans-serif;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: #ffefc7;
+  text-align: center;
+  background: transparent;
+  position: relative;
+  border: 0;
+  padding-top: 9px;
+}
+#launcher.state-full-install .update-or-install button .background {
+  display: block;
+  width: 250px;
+  height: 35px;
+  border: solid #e2d691;
+  border-width: 1px 0;
+  background: rgba(0, 0, 0, 0.25);
+  -webkit-transform: rotateX(-45deg) scaleY(1.4);
+}
+#launcher.state-full-install .update-or-install button .background::before {
+  content: '';
+  display: block;
+  position: absolute;
+  left: -1px;
+  top: -1px;
+  width: 8px;
+  height: 35px;
+  background: #ffefc7;
+}
+#launcher.state-full-install .update-or-install button .background::after {
+  content: '';
+  display: block;
+  position: absolute;
+  right: -1px;
+  top: -1px;
+  width: 8px;
+  height: 35px;
+  background: #ffefc7;
+}
+#launcher.state-full-install .update-or-install button .caption {
+  color: #e2d691;
+  opacity: 1;
+  letter-spacing: 2px;
+}
+#launcher.state-full-install .update-or-install button .caption.hidden {
+  opacity: 0;
+}
+#launcher.state-full-install .update-or-install button .caption.on {
+  color: #ffefc7;
+  text-shadow: 2px 2px 3px rgba(226, 97, 11, 0.5), -2px -2px 3px rgba(226, 97, 11, 0.5);
+}
+#launcher.state-full-install .update-or-install button .background-wrapper {
+  display: block;
+  position: absolute;
+  left: 0%;
+  top: 0;
+  width: 250px;
+  height: 35px;
+  -webkit-perspective: 145px;
+}
+#launcher.state-full-install .update-or-install button .left-light,
+#launcher.state-full-install .update-or-install button .right-light {
+  display: block;
+  position: absolute;
+  z-index: -1;
+  top: -25px;
+  width: 95px;
+  height: 85px;
+  overflow: hidden;
+}
+#launcher.state-full-install .update-or-install button .left-light::before,
+#launcher.state-full-install .update-or-install button .right-light::before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 15px;
+  width: 25px;
+  height: 55px;
+  background: red;
+}
+#launcher.state-full-install .update-or-install button .left-light {
+  left: -50px;
+}
+#launcher.state-full-install .update-or-install button .left-light::before {
+  left: -155px;
+  box-shadow: 190px 0 25px rgba(226, 97, 11, 0.5);
+  -webkit-transform: skew(47deg);
+}
+#launcher.state-full-install .update-or-install button .right-light {
+  right: -50px;
+}
+#launcher.state-full-install .update-or-install button .right-light::before {
+  right: -155px;
+  box-shadow: -190px 0 25px rgba(226, 97, 11, 0.5);
+  -webkit-transform: skew(-47deg);
+}
+#launcher.state-full-install .update-or-install .update {
+  display: none;
 }

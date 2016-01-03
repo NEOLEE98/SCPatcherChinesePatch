@@ -1,4 +1,4 @@
-(function(global) {
+﻿(function(global) {
 
   var defined = {};
 
@@ -26388,7 +26388,8 @@ System.register('src/scripts/launcher', ['npm:babel-runtime@5.2.9/helpers/create
       ConfigurationOptions = {
         MUTED: 'configuration_muted',
         USERNAME: 'configuration_username',
-        DOWNLOAD_CAP: 'download_cap'
+        DOWNLOAD_CAP: 'download_cap',
+        P2P_ENABLED: 'p2p_enabled'
       };
 
       Launcher = (function () {
@@ -26924,6 +26925,11 @@ System.register('src/scripts/launcher', ['npm:babel-runtime@5.2.9/helpers/create
           value: function getConfiguration(key) {
             return window.localStorage.getItem(key);
           }
+        }, {
+          key: 'enableP2P',
+          value: function enableP2P(enabled) {
+            return window.launcher.enableP2P(enabled);
+          }
         }]);
 
         return Launcher;
@@ -26938,7 +26944,7 @@ System.register('src/scripts/launcher', ['npm:babel-runtime@5.2.9/helpers/create
   };
 });
 System.register('src/scripts/index', ['npm:babel-runtime@5.2.9/helpers/to-array', 'npm:babel-runtime@5.2.9/helpers/sliced-to-array', 'npm:babel-runtime@5.2.9/core-js/promise', 'npm:babel-core@5.2.9/polyfill', 'github:components/jquery@2.1.3', 'src/scripts/launcher', 'src/scripts/sound-manager', 'src/scripts/utilities', 'bower:fetch@0.8.1', 'src/scripts/lib/x-select'], function (_export) {
-  var _toArray, _slicedToArray, _Promise, jQuery, Launcher, SoundManager, delay, XSelectElement, PUBLIC_API_HOST, TEST_API_HOST, AGREEMENT_ACCEPT, AGREEMENT_CANCEL, launcher, soundManager, showLoginError, hideLoginError, showFatalError, hideFatalError, hideInfoBox, showInfoBox, promisifiedIframe, showUserAgreement, showUserAgreements, formatBytes, updateDownloadProgress, resetDownloadProgress, updatePatcherStatus, getNewsAndPatchNotes;
+  var _toArray, _slicedToArray, _Promise, jQuery, Launcher, SoundManager, delay, XSelectElement, PUBLIC_API_HOST, TEST_API_HOST, AGREEMENT_ACCEPT, AGREEMENT_CANCEL, launcher, soundManager, showLoginError, hideLoginError, showDialog, hideDialog, hideInfoBox, showInfoBox, promisifiedIframe, showUserAgreement, showUserAgreements, formatBytes, updateDownloadProgress, resetDownloadProgress, updatePatcherStatus, getNewsAndPatchNotes;
 
   return {
     setters: [function (_npmBabelRuntime529HelpersToArray) {
@@ -26986,21 +26992,20 @@ System.register('src/scripts/index', ['npm:babel-runtime@5.2.9/helpers/to-array'
         }, 125);
       };
 
-      showFatalError = function showFatalError(errorMessage) {
-        var title = arguments[1] === undefined ? 'Fatal Error' : arguments[1];
-
+      showDialog = function showDialog(type, message, title) {
         var errorNode = jQuery('#fatal-error'),
             titleNode = errorNode.find('h1'),
             messageNode = errorNode.find('p');
 
+        errorNode.attr('data-type', type);
         titleNode.empty().html(title);
-        messageNode.empty().html(errorMessage);
+        messageNode.empty().html(message);
         $('#launcher').addClass('modal');
         errorNode.show();
         errorNode.css('opacity', 1);
       };
 
-      hideFatalError = function hideFatalError() {
+      hideDialog = function hideDialog() {
         var errorNode = jQuery('#fatal-error'),
             titleNode = errorNode.find('h1'),
             messageNode = errorNode.find('p');
@@ -27014,7 +27019,7 @@ System.register('src/scripts/index', ['npm:babel-runtime@5.2.9/helpers/to-array'
       };
 
       jQuery(document).on('click', '.close-fatal-error', function () {
-        hideFatalError();
+        hideDialog();
       });
 
       hideInfoBox = function hideInfoBox() {
@@ -27199,7 +27204,7 @@ System.register('src/scripts/index', ['npm:babel-runtime@5.2.9/helpers/to-array'
               progressNode.val((loaded / total * 100).toFixed(3));
               estimatedTimeNode.html(formatedTimeLeft);
               if (status == 'Verifying') {
-                bytesLeftNode.html('计算中...');
+                bytesLeftNode.html('Estimating...');
               } else {
                 bytesLeftNode.html(formatBytes(total - loaded));
               }
@@ -27261,6 +27266,7 @@ System.register('src/scripts/index', ['npm:babel-runtime@5.2.9/helpers/to-array'
 
         if (status === 'Downloading' || status === 'Checking Download') {
           statusToDisplay = '更新中';
+          downloadStatusNode.removeClass('disabled');
         } else if (status === 'Ready') {
           statusToDisplay = '启动就绪';
           var launcherOptionsNode = gameCommandsNode.find('.launch-options');
@@ -27268,9 +27274,14 @@ System.register('src/scripts/index', ['npm:babel-runtime@5.2.9/helpers/to-array'
           downloadProgressNode.removeClass('downloading');
           downloadProgressNode.prop('hidden', true);
           launcherOptionsNode.prop('hidden', false);
+          gameCommandsNode.find('.update-or-install').fadeOut('slow');
+          downloadStatusNode.removeClass('disabled');
         } else if (status === 'Pause') {
           statusToDisplay = '暂停';
           resetDownloadProgress();
+          downloadStatusNode.removeClass('disabled');
+        } else {
+          downloadStatusNode.addClass('disabled');
         }
 
         downloadStatusNode.text(statusToDisplay);
@@ -27331,7 +27342,8 @@ System.register('src/scripts/index', ['npm:babel-runtime@5.2.9/helpers/to-array'
           $('.launcher-version .number').text(version);
         });
 
-        new XSelectElement($('.settings-download-limit')[0]);
+        var downloadLimitSelect = new XSelectElement($('.settings-download-limit')[0]);
+        var p2pEnabledSelect = new XSelectElement($('.settings-p2p')[0]);
 
         $('.access-circles').animate({ opacity: 1 }, 1000);
         $('#login').animate({ opacity: 1 }, 1000).promise().done(function () {
@@ -27354,7 +27366,15 @@ System.register('src/scripts/index', ['npm:babel-runtime@5.2.9/helpers/to-array'
         });
 
         launcher.addEventListener('error', function (event) {
-          showFatalError(event.error, event.type);
+          showDialog('error', event.message, event.title);
+        });
+
+        launcher.addEventListener('warning', function (event) {
+          showDialog('warning', event.message, event.title);
+        });
+
+        launcher.addEventListener('info', function (event) {
+          showDialog('info', event.message, event.title);
         });
 
         launcher.addEventListener('download-progress', function (event) {
@@ -27370,10 +27390,28 @@ System.register('src/scripts/index', ['npm:babel-runtime@5.2.9/helpers/to-array'
 
         launcher.addEventListener('game-update-available', function (event) {
           console.log('Update Available', event);
+          $('.update-or-install').fadeIn('slow');
+
+          var gameCommandsNode = $('#news-and-launch .game-commands');
+          var downloadStatusNode = gameCommandsNode.find('h1');
+          var launcherOptionsNode = gameCommandsNode.find('.launch-options');
+          launcherOptionsNode.prop('hidden', true);
+          var downloadProgressNode = gameCommandsNode.find('.download-progress');
+          downloadProgressNode.removeClass('downloading');
+          downloadProgressNode.prop('hidden', true);;
+          downloadStatusNode.text('');
+          downloadStatusNode.addClass('disabled');
+
+          if (event && event.installed === 'true') {
+            $('#launcher').addClass('state-update');
+            $('#launcher').removeClass('state-full-install');
+          } else {
+            $('#launcher').addClass('state-full-install');
+            $('#launcher').removeClass('state-update');
+          }
           if (event && event.version) {
             $('.game-version span').text(event.version);
           }
-          launcher.resumeDownload();
         });
 
         launcher.addEventListener('patcher-state-change', function (event) {
@@ -27421,6 +27459,12 @@ System.register('src/scripts/index', ['npm:babel-runtime@5.2.9/helpers/to-array'
           $('.settings-container').toggleClass('open');
         });
 
+        $(document.body).on('click', '.update-or-install button', function (event) {
+          event.preventDefault();
+          launcher.resumeDownload();
+          $(this).closest('.update-or-install').fadeOut('slow');
+        });
+
         $(document.body).on('click', '.settings-copy-account', function (event) {
           event.preventDefault();
           $('.settings-container').removeClass('open');
@@ -27455,6 +27499,14 @@ System.register('src/scripts/index', ['npm:babel-runtime@5.2.9/helpers/to-array'
         environmentSwitcher.on('change', '[type="radio"]', function (event) {
           var environment = this.value;
 
+          var gameCommandsNode = $('#news-and-launch .game-commands');
+          var downloadStatusNode = gameCommandsNode.find('h1');
+          var downloadProgressNode = gameCommandsNode.find('.download-progress');
+          downloadProgressNode.removeClass('downloading');
+          downloadProgressNode.prop('hidden', true);
+          gameCommandsNode.find('.update-or-install').fadeOut('slow');
+          downloadStatusNode.removeClass('disabled');
+
           if (environment === 'Test') {
             environmentSwitcher.addClass('mode-test').removeClass('mode-public');
             delay(125).then(function () {
@@ -27484,23 +27536,27 @@ System.register('src/scripts/index', ['npm:babel-runtime@5.2.9/helpers/to-array'
           }
         });
 
+        function saveSettings() {
+          var form = $('.settings-dropdown');
+
+          var downloadCap = parseInt(form.find('.settings-download-limit').val(), 10);
+          launcher.setDownloadCap(downloadCap);
+          launcher.setConfiguration(Launcher.ConfigurationOptions.DOWNLOAD_CAP, downloadCap);
+
+          var enableP2P = parseInt(form.find('.settings-p2p').val(), 10);
+          launcher.setConfiguration(Launcher.ConfigurationOptions.P2P_ENABLED, enableP2P);
+          launcher.enableP2P(enableP2P);
+        }
+
         $(document.body).on('click', function (event) {
           var settingsContainer = $('.settings-container');
 
           if ($(event.target).closest('.settings-container').length === 0) {
             if (settingsContainer.hasClass('open')) {
               settingsContainer.removeClass('open');
+              saveSettings();
             }
           }
-        });
-
-        $(document.body).on('submit', '.settings-dropdown', function (event) {
-          var form = $(this);
-
-          event.preventDefault();
-
-          launcher.setDownloadCap(parseInt(form.find('.settings-download-limit').val(), 10));
-          $('.settings-container').removeClass('open');
         });
 
         $('#login').on('click', '.error a', function (event) {
@@ -27544,6 +27600,24 @@ System.register('src/scripts/index', ['npm:babel-runtime@5.2.9/helpers/to-array'
           }
         });
 
+        function startLauncher(username) {
+          launcher.start();
+          launcher.setConfiguration(Launcher.ConfigurationOptions.USERNAME, username);
+
+          var downloadCap = launcher.getConfiguration(Launcher.ConfigurationOptions.DOWNLOAD_CAP);
+
+          if (downloadCap) {
+            downloadLimitSelect.value = downloadCap;
+            launcher.setDownloadCap(parseInt(downloadCap, 10));
+          }
+
+          var enableP2P = launcher.getConfiguration(Launcher.ConfigurationOptions.P2P_ENABLED);
+
+          if (enableP2P) {
+            launcher.enableP2P(enableP2P);
+          }
+        }
+
         $('#login').on('submit', 'form', function (event) {
           var username = $('#login-username');
           var password = $('#login-password');
@@ -27561,9 +27635,6 @@ System.register('src/scripts/index', ['npm:babel-runtime@5.2.9/helpers/to-array'
             var session_id = _ref5.session_id;
             var envs = _ref5.envs;
 
-            launcher.start();
-            launcher.setConfiguration(Launcher.ConfigurationOptions.USERNAME, username.val());
-
             soundManager.getSound('login').then(function (sound) {
               return sound.play();
             });
@@ -27577,12 +27648,7 @@ System.register('src/scripts/index', ['npm:babel-runtime@5.2.9/helpers/to-array'
             recordstrips.deactivate();
             password.val('');
             return _Promise.resolve(loginNode.fadeOut('slow').promise()).then(function () {
-              var downloadCap = launcher.getConfiguration(Launcher.ConfigurationOptions.DOWNLOAD_CAP);
-
-              if (downloadCap) {
-                launcher.setDownloadCap(parseInt(downloadCap, 10));
-              }
-
+              startLauncher(username.val());
               loginOverlayNode.addClass('logged-in');
               return delay(2500);
             }).then(function () {
